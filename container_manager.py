@@ -44,8 +44,6 @@ class ContainerManager:
         # Connect to the docker daemon
         try:
             self.initialize_connection(settings, app)
-            for job in self.expiration_scheduler.get_jobs():
-                job.resume()
         except ContainerException:
             for job in self.expiration_scheduler.get_jobs():
                 job.pause()
