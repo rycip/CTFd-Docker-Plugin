@@ -57,10 +57,10 @@
 	<label>
 		Port<br>
 		<small class="form-text text-muted">
-			Internal container port that should be exposed (external port will be automatically assigned)
+		Internal container ports that should be exposed (external ports will be automatically assigned). Please use json notation for list of port
 		</small>
 	</label>
-	<input type="number" class="form-control" name="port" value="{{ challenge.port }}" required>
+	<input type="text" class="form-control" name="ports" value="{{ challenge.ports }}" required>
 </div>
 
 <div class="form-group">

@@ -1,8 +1,7 @@
-from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
-from CTFd.models import db
-from CTFd.models import Challenges
+from CTFd.models import Challenges, db
 
 
 class ContainerChallengeModel(Challenges):
@@ -11,7 +10,7 @@ class ContainerChallengeModel(Challenges):
         db.Integer, db.ForeignKey("challenges.id", ondelete="CASCADE"), primary_key=True
     )
     image = db.Column(db.Text)
-    port = db.Column(db.Integer)
+    ports = db.Column(db.Text)
     command = db.Column(db.Text, default="")
     volumes = db.Column(db.Text, default="")
 
@@ -31,15 +30,26 @@ class ContainerInfoModel(db.Model):
     challenge_id = db.Column(
         db.Integer, db.ForeignKey("challenges.id", ondelete="CASCADE")
     )
-    team_id = db.Column(
-        db.Integer, db.ForeignKey("teams.id", ondelete="CASCADE")
-    )
-    port = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"))
     timestamp = db.Column(db.Integer)
     expires = db.Column(db.Integer)
-    team = relationship("Teams", foreign_keys=[team_id])
-    challenge = relationship(ContainerChallengeModel,
-                             foreign_keys=[challenge_id])
+    team = relationship("Users", foreign_keys=[user_id])
+    challenge = relationship(ContainerChallengeModel, foreign_keys=[challenge_id])
+    ports = relationship(
+        "ContainerInfoModelPort",
+        back_populates="container",
+        cascade="all, delete-orphan",
+    )
+
+
+class ContainerInfoModelPort(db.Model):
+    container_id = db.Column(
+        db.String(512),
+        db.ForeignKey("container_info_model.container_id"),
+        primary_key=True,
+    )
+    port = db.Column(db.Integer, primary_key=True)
+    container = relationship(ContainerInfoModel, back_populates="ports")
 
 
 class ContainerSettingsModel(db.Model):

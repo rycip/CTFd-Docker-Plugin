@@ -1,12 +1,10 @@
-CTFd._internal.challenge.data = undefined;
+CTFd._internal.challenge.data = undefined
 
-CTFd._internal.challenge.renderer = CTFd.lib.markdown();
+CTFd._internal.challenge.renderer = null;
 
 CTFd._internal.challenge.preRender = function () {};
 
-CTFd._internal.challenge.render = function (markdown) {
-	return CTFd._internal.challenge.renderer.render(markdown);
-};
+CTFd._internal.challenge.render = null;
 
 CTFd._internal.challenge.postRender = function () {};
 
@@ -87,7 +85,7 @@ function container_request(challenge_id) {
 			requestError.style.display = "none";
 			requestError.firstElementChild.innerHTML = "";
 			requestButton.parentNode.removeChild(requestButton);
-			connectionInfo.innerHTML = data.hostname + ":" + data.port;
+			connectionInfo.innerHTML = "Hostname: " + data.hostname + "<br>Ports:<br>" + data.ports.map((port, i) => data.connection_info[i] + " " + port).join('<br>');
 			containerExpires.innerHTML = Math.ceil(
 				(new Date(data.expires * 1000) - new Date()) / 1000 / 60
 			);
@@ -134,7 +132,7 @@ function container_reset(challenge_id) {
 		} else {
 			// Success
 			requestError.style.display = "none";
-			connectionInfo.innerHTML = data.hostname + ":" + data.port;
+			connectionInfo.innerHTML = "Hostname: " + data.hostname + "<br>Ports:<br>" + data.ports.map((port, i) => data.connection_info[i] + " " + port).join('<br>');
 			containerExpires.innerHTML = Math.ceil(
 				(new Date(data.expires * 1000) - new Date()) / 1000 / 60
 			);
